@@ -79,22 +79,45 @@ function Eq({ children }) {
 // ── Nav ───────────────────────────────────────────────────────────────────────
 
 function NavBar() {
+  const [open, setOpen] = useState(false)
+  const links = ['Abstract', 'Methodology', 'Results', 'References', 'Citation']
   return (
     <nav className="sticky top-0 z-50 border-b border-slate-200"
       style={{ fontFamily: 'var(--font-display)', background: '#f1f5f9' }}>
       <div className="max-w-5xl mx-auto px-6 h-12 flex items-center justify-between">
-        <span className="text-xs font-medium text-slate-400 tracking-widest uppercase">
-          Srinivasan & Sirivara · UW 2026
+        <span className="text-xs font-semibold text-slate-600 tracking-widest uppercase">
+          DuckRL
         </span>
-        <div className="flex gap-6">
-          {['Abstract', 'Methodology', 'Results', 'References', 'Citation'].map(s => (
+        {/* desktop links */}
+        <div className="hidden sm:flex gap-6">
+          {links.map(s => (
             <a key={s} href={`#${s.toLowerCase()}`}
               className="text-sm text-slate-500 hover:text-slate-900 transition-colors">
               {s}
             </a>
           ))}
         </div>
+        {/* mobile hamburger */}
+        <button className="sm:hidden flex flex-col gap-1.5 p-2 -mr-2" onClick={() => setOpen(o => !o)}
+          aria-label="Toggle menu">
+          <span className={`block w-5 h-0.5 bg-slate-600 transition-transform duration-200 ${open ? 'translate-y-2 rotate-45' : ''}`} />
+          <span className={`block w-5 h-0.5 bg-slate-600 transition-opacity duration-200 ${open ? 'opacity-0' : ''}`} />
+          <span className={`block w-5 h-0.5 bg-slate-600 transition-transform duration-200 ${open ? '-translate-y-2 -rotate-45' : ''}`} />
+        </button>
       </div>
+      {/* mobile dropdown */}
+      {open && (
+        <div className="sm:hidden border-t border-slate-200 px-6 py-3 flex flex-col gap-3"
+          style={{ background: '#f1f5f9' }}>
+          {links.map(s => (
+            <a key={s} href={`#${s.toLowerCase()}`}
+              className="text-sm text-slate-600 hover:text-slate-900 transition-colors"
+              onClick={() => setOpen(false)}>
+              {s}
+            </a>
+          ))}
+        </div>
+      )}
     </nav>
   )
 }
@@ -104,10 +127,10 @@ function NavBar() {
 function Hero() {
   return (
     <section className="bg-white border-b border-zinc-100">
-      <div className="max-w-4xl mx-auto px-6 pt-20 pb-14 text-center">
-        <h1 className="text-5xl sm:text-6xl font-bold text-zinc-900 leading-[1.1] tracking-tight mb-4"
+      <div className="max-w-6xl mx-auto px-6 pt-20 pb-14 text-center">
+        <h1 className="text-5xl sm:text-6xl font-bold text-zinc-900 leading-[1.1] tracking-tight mb-12"
           style={{ fontFamily: 'var(--font-display)' }}>
-          Sim-to-Real Reinforcement Learning for Physics-Based Bipedal Character Control
+          DuckRL: Sim-to-Real Reinforcement Learning for Physics-Based Bipedal Character Control
         </h1>
 
         <p className="text-lg text-zinc-400 mb-10 max-w-lg mx-auto">
