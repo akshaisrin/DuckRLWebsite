@@ -1,14 +1,14 @@
 import { useState } from 'react'
 import learningCurves from './assets/learning_curves.png'
 import diagramImg from './assets/diagram.png'
-import paperPDF from './CSE493SReportFinal.pdf'
+import paperPDF from './DuckRL.pdf'
 
 const PAPER_URL = paperPDF
 const CODE_URL = 'https://github.com/akshaisrin/SimToRealDuck.git'
 
 const authors = [
-  { name: 'Akshai Srinivasan', email: 'akshsrin@cs.washington.edu' },
-  { name: 'Neel Sirivara', email: 'nsiriv@cs.washington.edu' },
+  { name: 'Akshai Srinivasan', school: 'University of Washington' },
+  { name: 'Neel Sirivara', school: 'University of Washington' },
 ]
 
 const resultsRows = [
@@ -139,15 +139,13 @@ function Hero() {
 
         <div className="flex flex-wrap justify-center gap-8 mb-10">
           {authors.map(a => (
-            <div key={a.email} className="text-center">
+            <div key={a.school} className="text-center">
               <p className="font-semibold text-zinc-800 text-base" style={{ fontFamily: 'var(--font-display)' }}>
                 {a.name}
               </p>
-              <a href={`mailto:${a.email}`}
-                className="text-xs text-zinc-400 hover:text-zinc-600 transition-colors"
-                style={{ fontFamily: 'var(--font-mono)' }}>
-                {a.email}
-              </a>
+              <p className="text-xs text-zinc-400" style={{ fontFamily: 'var(--font-mono)' }}>
+                {a.school}
+              </p>
             </div>
           ))}
         </div>
@@ -186,25 +184,32 @@ function Abstract() {
         <SectionLabel>Abstract</SectionLabel>
         <div className="space-y-4 text-zinc-600 leading-relaxed text-[1.05rem]">
           <p>
-            We present two contributions toward understanding sim-to-real transfer in bipedal
-            locomotion. First, we survey a line of work on physics-based character control,
-            tracing the progression from explicit motion imitation in DeepMimic (2018) through
-            adversarial style learning in AMP (2021) to real-world deployment on bipedal hardware
-            in Disney BDX (2025) and Olaf (2025). Second, we empirically investigate whether
-            adaptive dynamics conditioning via Rapid Motor Adaptation (RMA) improves robustness
-            over standard domain randomization on the OpenDuck-Mini platform, an open-source
-            bipedal robot derived from Disney's BDX character.
+            Sim-to-real transfer remains one of the central unsolved problems in robot learning. Policies trained in simulation must
+            eventually generalize to the physical world, but discrepancies in contact dynamics, actuator behavior, and morphology
+            consistently erode performance at deployment. This problem is especially prevalent in bipedal robots, where instability
+            compounds any modeling error and small perturbations can cascade into falls. The primary technique used to bridge
+            this gap has been domain randomization (DR), which trains policies over randomized physics or dynamics parameters
+            to induce robustness across a range of conditions. But DR alone has known limitations: it forces the policy to implicitly
+            average over all possible dynamics rather than reason about which dynamics it is currently in, leading to conservative
+            behavior that degrades under out-of-distribution conditions.
           </p>
           <p>
-            We train three policies sequentially: a baseline walking policy under light domain
-            randomization, a non-adaptive policy fine-tuned under moderate domain randomization,
-            and an RMA policy that conditions on a 3-dim extrinsics vector encoding floor
-            friction, actuator gain, and torso mass. Evaluating under dynamics perturbations
-            that exceed the training distribution, the RMA policy achieves an 11-point reward
-            improvement over the non-adaptive baseline and survives all three perturbation
-            conditions, while the non-adaptive policy fails under all three. These results
-            support the conclusion that domain randomization is necessary but not sufficient
-            for robust sim-to-real transfer.
+            This paper makes two contributions. First, we survey a prominent line of work on RL-based physics-based character
+            control, tracing the progression from motion imitation in DeepMimic through adversarial style learning in AMP to
+            hardware deployment under non-standard morphologies in Disney BDX and Olaf. Second, we empirically investigate
+            two failure modes of sim-to-real transfer using the OpenDuck-Mini platform, a small-scale bipedal robot derived from
+            Disney Research’s BDX character. We train a baseline walking policy using PPO under light domain randomization,
+            then evaluate whether adaptive dynamics conditioning via Rapid Motor Adaptation (RMA) improves robustness over a
+            non-adaptive moderate DR baseline under dynamics perturbations that exceed the training distribution.
+          </p>
+          <p>
+            Both policies share identical architectures, reward structures, and training curricula; the sole difference is whether a
+            three-dimensional extrinsics vector encoding current environment dynamics is present in the policy input. The RMA
+            policy achieves an 11-point reward improvement over the non-adaptive baseline (99 vs. 88) and survives all three
+            out-of-distribution perturbation conditions (mass scaling to 2× nominal, actuator gain reduction to 0.5× nominal, and
+            an external push impulse), while the non-adaptive policy fails under all three. These results support the conclusion
+            that domain randomization is necessary but not sufficient for robust sim-to-real transfer, and that reducing dynamics
+            uncertainty at inference time is more effective than scaling randomization width alone.
           </p>
         </div>
       </div>
