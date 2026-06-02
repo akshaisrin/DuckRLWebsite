@@ -467,7 +467,60 @@ function Results() {
         </p>
         {comparisons.map((c, i) => <VideoPair key={i} {...c} />)}
 
-        {/* Morphological placeholder */}
+        {/* Morphological Stress Test */}
+        <h3 className="text-base font-semibold text-zinc-800 mb-3" style={{ fontFamily: 'var(--font-display)' }}>
+          Morphological Stress Test
+        </h3>
+        <p className="text-sm text-zinc-400 mb-6 leading-relaxed">
+          Zero-shot evaluation across four structured morphological perturbations designed as proxies
+          for Olaf-like deployment conditions. No retraining; policies are evaluated directly from
+          their trained checkpoints.
+        </p>
+        <div className="bg-white border border-zinc-200 rounded-xl overflow-hidden mb-4">
+          <table className="w-full text-sm" style={{ borderCollapse: 'collapse' }}>
+            <thead>
+              <tr style={{ borderBottom: '2px solid #f4f4f5' }}>
+                <th className="text-left py-3 px-5 text-xs font-semibold uppercase tracking-wider text-zinc-400"
+                  style={{ fontFamily: 'var(--font-display)' }}>Stress Condition</th>
+                <th className="py-3 px-5 text-xs font-semibold uppercase tracking-wider text-zinc-400 text-center"
+                  style={{ fontFamily: 'var(--font-display)' }}>Baseline DR</th>
+                <th className="py-3 px-5 text-xs font-semibold uppercase tracking-wider text-zinc-400 text-center"
+                  style={{ fontFamily: 'var(--font-display)' }}>Moderate DR</th>
+                <th className="py-3 px-5 text-xs font-semibold uppercase tracking-wider text-indigo-500 text-center"
+                  style={{ fontFamily: 'var(--font-display)' }}>RMA</th>
+              </tr>
+            </thead>
+            <tbody>
+              {[
+                { condition: 'Front-loaded mass / CoM shift', note: 'Torso and head mass increased, CoM displaced forward' },
+                { condition: 'Asymmetric mass', note: 'Left-right leg mass mismatch' },
+                { condition: 'Reduced support + low friction', note: 'Smaller foot contact area, degraded ground reaction' },
+                { condition: 'CoM shift + kp_scale = 0.6', note: 'Compounded inertial and actuation stress' },
+              ].map((r, i, arr) => (
+                <tr key={i} style={{ borderBottom: i < arr.length - 1 ? '1px solid #f4f4f5' : 'none' }}>
+                  <td className="py-3.5 px-5">
+                    <p className="font-medium text-zinc-800" style={{ fontFamily: 'var(--font-mono)', fontSize: 13 }}>
+                      {r.condition}
+                    </p>
+                    <p className="text-xs text-zinc-400 mt-0.5">{r.note}</p>
+                  </td>
+                  <td className="py-3.5 px-5 text-center"><Tick pass={false} /></td>
+                  <td className="py-3.5 px-5 text-center"><Tick pass={false} /></td>
+                  <td className="py-3.5 px-5 text-center"><Tick pass={true} /></td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <p className="text-xs text-zinc-400 leading-relaxed">
+          Both non-adaptive policies fail across all conditions despite moderate DR covering mass and
+          gain variation in isolation, suggesting the failure mode is not a coverage problem but a
+          signal problem: the policy needs to know which dynamics condition it is in to respond
+          appropriately.
+        </p>
+
+
+        {/* Morphological placeholder
         <h3 className="text-base font-semibold text-zinc-800 mb-3" style={{ fontFamily: 'var(--font-display)' }}>
           Morphological Stress Test
         </h3>
@@ -480,7 +533,7 @@ function Results() {
             probe the limits of transfer under morphological mismatch, analogous to the challenges
             documented in Olaf.
           </p>
-        </div>
+        </div> */}
       </div>
     </section>
   )
